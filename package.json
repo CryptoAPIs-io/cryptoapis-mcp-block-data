@@ -1,6 +1,6 @@
 {
   "name": "@cryptoapis-io/mcp-block-data",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "MCP server for retrieving block-level data from EVM, UTXO, and XRP blockchains via Crypto APIs",
   "license": "MIT",
   "author": "Crypto APIs, Inc.",
@@ -8,6 +8,7 @@
     "type": "git",
     "url": "https://github.com/CryptoAPIs-io/cryptoapis-mcp-block-data.git"
   },
+  "mcpName": "io.github.CryptoAPIs-io/mcp-block-data",
   "keywords": [
     "mcp",
     "cryptoapis",
@@ -25,7 +26,8 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "server.json"
   ],
   "bin": {
     "cryptoapis-mcp-block-data": "dist/cli.js"
