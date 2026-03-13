@@ -40,27 +40,7 @@ export const UtxoBlockToolSchema = z
             .describe("Number of blocks to return (for list-latest-mined-blocks)"),
     })
     .merge(RequestMetadataSchema)
-    .merge(OffsetPaginationSchema)
-    .refine(
-        (data) => {
-            if (
-                data.action === "get-block-by-height" ||
-                data.action === "list-transactions-by-block-height"
-            )
-                return data.blockHeight != null;
-            if (
-                data.action === "get-block-by-hash" ||
-                data.action === "list-transactions-by-block-hash"
-            )
-                return data.blockHash != null && data.blockHash !== "";
-            return true;
-        },
-        {
-            message:
-                "blockHeight required for get-block-by-height and list-transactions-by-block-height; blockHash required for get-block-by-hash and list-transactions-by-block-hash",
-            path: ["action"],
-        }
-    );
+    .merge(OffsetPaginationSchema);
 
 export type UtxoBlockInput = z.infer<typeof UtxoBlockToolSchema>;
 

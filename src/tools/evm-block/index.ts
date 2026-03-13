@@ -1,4 +1,4 @@
-import type { CryptoApisHttpClient, RequestResult } from "@cryptoapis-io/mcp-shared";
+import type { CryptoApisHttpClient, McpLogger, RequestResult } from "@cryptoapis-io/mcp-shared";
 import { EVM_BLOCKCHAIN_NETWORK_DESCRIPTION } from "@cryptoapis-io/mcp-shared";
 import type { McpToolDef } from "../types.js";
 import { EvmBlockToolSchema, type EvmBlockInput } from "./schema.js";
@@ -38,7 +38,7 @@ ${EVM_BLOCKCHAIN_NETWORK_DESCRIPTION}`,
     },
     inputSchema: EvmBlockToolSchema,
     handler:
-        (client: CryptoApisHttpClient) =>
+        (client: CryptoApisHttpClient, logger: McpLogger) =>
         async (input: EvmBlockInput) => {
             let result: RequestResult<unknown>;
 
@@ -50,29 +50,33 @@ ${EVM_BLOCKCHAIN_NETWORK_DESCRIPTION}`,
 
             switch (input.action) {
                 case "get-block-by-height":
+                    if (input.blockHeight == null) throw new Error("blockHeight is required for get-block-by-height");
                     result = await handleGetBlockByHeight(client, {
                         ...baseParams,
-                        blockHeight: input.blockHeight!,
+                        blockHeight: input.blockHeight,
                     });
                     break;
                 case "get-block-by-hash":
+                    if (!input.blockHash) throw new Error("blockHash is required for get-block-by-hash");
                     result = await handleGetBlockByHash(client, {
                         ...baseParams,
-                        blockHash: input.blockHash!,
+                        blockHash: input.blockHash,
                     });
                     break;
                 case "list-transactions-by-block-hash":
+                    if (!input.blockHash) throw new Error("blockHash is required for list-transactions-by-block-hash");
                     result = await handleListTransactionsByBlockHash(client, {
                         ...baseParams,
-                        blockHash: input.blockHash!,
+                        blockHash: input.blockHash,
                         limit: input.limit,
                         offset: input.offset,
                     });
                     break;
                 case "list-transactions-by-block-height":
+                    if (input.blockHeight == null) throw new Error("blockHeight is required for list-transactions-by-block-height");
                     result = await handleListTransactionsByBlockHeight(client, {
                         ...baseParams,
-                        blockHeight: input.blockHeight!,
+                        blockHeight: input.blockHeight,
                         limit: input.limit,
                         offset: input.offset,
                     });
@@ -86,7 +90,20 @@ ${EVM_BLOCKCHAIN_NETWORK_DESCRIPTION}`,
                         count: input.count,
                     });
                     break;
+                default:
+                    throw new Error(`Unknown action: ${(input as any).action}`);
             }
+
+            logger.logInfo({
+                tool: "evm_block_data",
+                action: input.action,
+                blockchain: input.blockchain,
+                network: input.network,
+                creditsConsumed: result.creditsConsumed,
+                creditsAvailable: result.creditsAvailable,
+                responseTime: result.responseTime,
+                throughputUsage: result.throughputUsage,
+            });
 
             return {
                 content: [
