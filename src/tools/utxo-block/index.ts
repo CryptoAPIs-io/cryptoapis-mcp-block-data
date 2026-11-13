@@ -1,3 +1,4 @@
+import { READ_ONLY_TOOL } from "@cryptoapis-io/mcp-shared";
 import type { CryptoApisHttpClient, McpLogger, RequestResult } from "@cryptoapis-io/mcp-shared";
 import { UTXO_BLOCKCHAIN_NETWORK_DESCRIPTION } from "@cryptoapis-io/mcp-shared";
 import type { McpToolDef } from "../types.js";
@@ -17,6 +18,8 @@ import { credits as listLatestMinedBlocksCredits } from "./list-latest-mined-blo
 
 export const utxoBlockTool: McpToolDef<typeof UtxoBlockToolSchema> = {
     name: "utxo_block_data",
+    title: "UTXO block data",
+    annotations: READ_ONLY_TOOL,
     description: `Get UTXO block details (Block Data product).
 
 Actions:

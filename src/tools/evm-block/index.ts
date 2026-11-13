@@ -1,3 +1,4 @@
+import { READ_ONLY_TOOL } from "@cryptoapis-io/mcp-shared";
 import type { CryptoApisHttpClient, McpLogger, RequestResult } from "@cryptoapis-io/mcp-shared";
 import { EVM_BLOCKCHAIN_NETWORK_DESCRIPTION } from "@cryptoapis-io/mcp-shared";
 import type { McpToolDef } from "../types.js";
@@ -17,6 +18,8 @@ import { credits as listLatestMinedBlocksCredits } from "./list-latest-mined-blo
 
 export const evmBlockTool: McpToolDef<typeof EvmBlockToolSchema> = {
     name: "evm_block_data",
+    title: "EVM block data",
+    annotations: READ_ONLY_TOOL,
     description: `Get EVM block details (Block Data product).
 
 Actions:

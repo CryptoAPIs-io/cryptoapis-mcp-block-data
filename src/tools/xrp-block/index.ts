@@ -1,3 +1,4 @@
+import { READ_ONLY_TOOL } from "@cryptoapis-io/mcp-shared";
 import type { CryptoApisHttpClient, McpLogger, RequestResult } from "@cryptoapis-io/mcp-shared";
 import type { McpToolDef } from "../types.js";
 import { XrpBlockToolSchema, type XrpBlockInput } from "./schema.js";
@@ -18,6 +19,8 @@ const XRP_DESCRIPTION = `Get XRP block details (Block Data product). Path uses n
 
 export const xrpBlockTool: McpToolDef<typeof XrpBlockToolSchema> = {
     name: "xrp_block_data",
+    title: "XRP block data",
+    annotations: READ_ONLY_TOOL,
     description: `${XRP_DESCRIPTION}
 
 Actions:
